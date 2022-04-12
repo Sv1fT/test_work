@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Filters\ProductFilter;
+use App\Http\Filters\CategoryFilter;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -28,10 +28,10 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param ProductFilter $filter
+     * @param CategoryFilter $filter
      * @return AnonymousResourceCollection
      */
-    public function index(ProductFilter $filter): AnonymousResourceCollection
+    public function index(CategoryFilter $filter): AnonymousResourceCollection
     {
         $products = $this->products->filter($filter)->get();
 

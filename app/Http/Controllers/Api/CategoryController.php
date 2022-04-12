@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Filters\CategoryFilter;
 use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +18,13 @@ class CategoryController extends Controller
     public function __construct(Category $category)
     {
         $this->categories = $category->with('products');
+    }
+
+    public function index(CategoryFilter $filter)
+    {
+        $categories = $this->categories->filter($filter)->get();
+
+        return CategoryResource::collection($categories);
     }
 
     /**
