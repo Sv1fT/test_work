@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Cassandra\Exception\InvalidQueryException;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -34,8 +36,18 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e, $request) {
+            $message = $e->getMessage();
+            if($e->getCode() == 23000){
+                $message = __('messages.error_foreign');
+            }
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => $message
+                ], 404);
+            }
         });
+
+
     }
 }
